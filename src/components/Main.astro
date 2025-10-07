@@ -15,14 +15,14 @@ const years = new Date().getFullYear() - 2021
 
 {
   lang === 'en' ? (
-    <p class='text-[#D1D5DB] text-md my-12'>
+    <p class='text-[#1b1b18] text-md my-12 pl-4'>
       I'm a passionate coder with +{years} years of experience. Based in
       Valencia, Spain.
       <br />I like open source software, great UX/UI design and a great
       napolitan pizza. I also create content. vim user btw.
     </p>
   ) : (
-    <p class='text-[#D1D5DB] text-md my-12'>
+    <p class='text-[#1b1b18] text-md my-12 pl-4'>
       Soy un desarrollador de software apasionado con +{years} años de
       experiencia. Residiendo en Valencia, España.
       <br />
@@ -31,9 +31,7 @@ const years = new Date().getFullYear() - 2021
     </p>
   )
 }
-<div class='flex flex-col flex-1 py-12'>
-  <span class='text-[#D1D5DB] text-md'>Blog 📒</span>
-  <div class='py-2'>
+<div class='flex flex-col flex-1 mb-12' >
     <ul class='gap-4 grid grid-cols-1 md:grid-cols-1'>
       {
         posts

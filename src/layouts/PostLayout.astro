@@ -23,24 +23,24 @@ const { language, frontmatter } = Astro.props
       keywords={frontmatter.keywords}
     />
   </head>
-  <body class='flex flex-col min-h-screen py-12 bg-[#171717] w-full gap-8'>
+  <body class='flex flex-col min-h-screen py-12 bg-[#FDFDFC] w-full gap-8'>
     <ProgressBar />
     <Navbar />
-    <div class='flex flex-col w-full max-w-[960px] m-auto'>
+    <div class='flex flex-col w-full max-w-[930px] m-auto'>
       <div class='flex flex-col py-20 gap-4 max-sm:px-4'>
-        <h1 class='text-2xl text-[#EEEEEC] md:text-4xl font-bold mb-2'>
+        <h1 class='text-2xl text-[#1b1b18] md:text-4xl font-bold mb-2'>
           {frontmatter.title}
         </h1>
         <div class='flex gap-2 items-center'>
-          <span class='text-[#D1D5DB]'>
+          <span class='text-[#1b1b18]'>
             {new Date(frontmatter.pubDate).toLocaleDateString()} -
           </span>
-          <span class='text-[#D1D5DB]'>
+          <span class='text-[#1b1b18]'>
             {frontmatter.tags.join(', ')}
           </span>
         </div>
       </div>
-      <div class='flex flex-col m-auto gap-2 max-sm:px-4 max-w-[960px] pb-12'>
+      <div class='flex flex-col m-auto gap-2 max-sm:px-4 max-w-[680px] pb-12'>
         <Prose frontmatter={frontmatter}>
           {
             frontmatter.wip ? (
@@ -74,7 +74,7 @@ const { language, frontmatter } = Astro.props
         data-reactions-enabled='1'
         data-emit-metadata='0'
         data-input-position='top'
-        data-theme='noborder_dark'
+        data-theme='light'
         data-lang='en'
         data-loading='lazy'
         crossorigin='anonymous'
