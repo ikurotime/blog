@@ -15,14 +15,14 @@ const years = new Date().getFullYear() - 2021
 
 {
   lang === 'en' ? (
-    <p class='text-[#1b1b18] text-md my-12 pl-4'>
+    <p class='text-[#1b1b18] text-md my-12 pl-5'>
       I'm a passionate coder with +{years} years of experience. Based in
       Valencia, Spain.
       <br />I like open source software, great UX/UI design and a great
       napolitan pizza. I also create content. vim user btw.
     </p>
   ) : (
-    <p class='text-[#1b1b18] text-md my-12 pl-4'>
+    <p class='text-[#1b1b18] text-md my-12 pl-5'>
       Soy un desarrollador de software apasionado con +{years} años de
       experiencia. Residiendo en Valencia, España.
       <br />
@@ -31,31 +31,30 @@ const years = new Date().getFullYear() - 2021
     </p>
   )
 }
-<div class='flex flex-col flex-1 mb-12' >
-    <ul class='gap-4 grid grid-cols-1 md:grid-cols-1'>
-      {
-        posts
-          .filter(
-            (post) => post.data.draft === false && post.data.language === lang
-          )
-          .sort(
-            (a, b) =>
-              new Date(b.data.pubDate).getTime() -
-              new Date(a.data.pubDate).getTime()
-          )
-          .map((post) => (
-            <li class='flex w-full flex-col'>
-              <a href={getPath(post)}>
-                <Card
-                  title={post.data.title}
-                  description={post.data.description}
-                  tags={post.data.tags}
-                  pubDate={new Date(post.data.pubDate).toLocaleDateString()}
-                />
-              </a>
-            </li>
-          ))
-      }
-    </ul>
-  </div>
+<div class='flex flex-col flex-1 mb-12'>
+  <ul class='gap-4 grid grid-cols-1 md:grid-cols-1'>
+    {
+      posts
+        .filter(
+          (post) => post.data.draft === false && post.data.language === lang
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.data.pubDate).getTime() -
+            new Date(a.data.pubDate).getTime()
+        )
+        .map((post) => (
+          <li class='flex w-full flex-col'>
+            <a href={getPath(post)}>
+              <Card
+                title={post.data.title}
+                description={post.data.description}
+                tags={post.data.tags}
+                pubDate={new Date(post.data.pubDate).toLocaleDateString()}
+              />
+            </a>
+          </li>
+        ))
+    }
+  </ul>
 </div>
