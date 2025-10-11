@@ -1,6 +1,6 @@
 ---
 import Prose from './Prose.astro'
-import '@fontsource-variable/inter'
+import '@fontsource-variable/aleo'
 import Head from '../components/Head.astro'
 import Footer from './Footer.astro'
 import Navbar from './Navbar.astro'
@@ -26,8 +26,8 @@ const { language, frontmatter } = Astro.props
   <body class='flex flex-col min-h-screen bg-[#FDFDFC] w-full gap-8'>
     <ProgressBar />
     <Navbar />
-    <div class='flex flex-col w-full max-w-[680px] m-auto'>
-      <div class='flex flex-col py-20 gap-4 max-sm:px-4'>
+    <div class='flex flex-col w-full max-w-[920px] m-auto'>
+      <div class='flex flex-col py-8 gap-4 max-sm:px-4'>
         <h1 class='text-2xl text-[#1b1b18] md:text-4xl font-bold mb-2'>
           {frontmatter.title}
         </h1>
@@ -40,7 +40,7 @@ const { language, frontmatter } = Astro.props
           </span>
         </div>
       </div>
-      <div class='flex flex-col m-auto gap-2 max-sm:px-4 max-w-[680px] pb-12'>
+      <div class='flex flex-col m-auto gap-2 max-sm:px-4 max-w-[920px] pb-12'>
         <Prose frontmatter={frontmatter}>
           {
             frontmatter.wip ? (
@@ -86,7 +86,7 @@ const { language, frontmatter } = Astro.props
           background-color: #f9f9f8;
         }
         body {
-          font-family: 'Inter Variable', sans-serif;
+          font-family: 'Aleo Variable', serif;
         }
         /* Fix <pre> tag gap when code is next element. */
         pre:has(> code) {
