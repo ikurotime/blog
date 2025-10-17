@@ -5,6 +5,7 @@ import Head from '../components/Head.astro'
 import Footer from './Footer.astro'
 import Navbar from './Navbar.astro'
 import ProgressBar from '../components/ProgressBar.astro'
+import aleoFont from '@fontsource-variable/aleo/files/aleo-latin-wght-normal.woff2?url'
 const { language, frontmatter } = Astro.props
 ---
 
@@ -19,7 +20,7 @@ const { language, frontmatter } = Astro.props
     <meta name='generator' content={Astro.generator} />
     <link
       rel='preload'
-      href='/node_modules/@fontsource-variable/aleo/files/aleo-latin-wght-normal.woff2'
+      href={aleoFont}
       as='font'
       type='font/woff2'
       crossorigin
