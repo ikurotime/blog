@@ -14,6 +14,13 @@ const { title, language } = Astro.props
     />
     <meta name='viewport' content='width=device-width' />
     <meta name='generator' content={Astro.generator} />
+    <link
+      rel='preload'
+      href='/node_modules/@fontsource-variable/aleo/files/aleo-latin-wght-normal.woff2'
+      as='font'
+      type='font/woff2'
+      crossorigin
+    />
     <title>{title}</title>
   </head>
   <body class='flex flex-col bg-[#FDFDFC] text-[#1b1b18]'>
