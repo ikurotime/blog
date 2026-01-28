@@ -1,21 +1,24 @@
 ---
 import LanguagePicker from '../components/LanguagePicker.astro'
+import DarkModeToggle from '../components/DarkModeToggle.astro'
 ---
 
 <div
-  class='flex justify-between max-w-[925px] text-[#1b1b18] mx-auto w-full max-sm:px-4 pt-12'
+  class='flex justify-between max-w-[925px] text-[#1b1b18] dark:text-[#EBDBB2] mx-auto w-full max-sm:px-4 pt-12'
 >
   <div class='hidden md:block leading-tight'>
     <a href='/'>
       <h1>David Huertas</h1>
-      <span class='text-[#1b1b18] font-bold'>Software Engineer</span>
+      <span class='text-[#1b1b18] dark:text-[#EBDBB2] font-bold'
+        >Software Engineer</span
+      >
     </a>
   </div>
 
   <div class='block md:hidden'>
     <h1>DH</h1>
   </div>
-  <div class='flex gap-4'>
+  <div class='flex gap-4 justify-center items-center'>
     <a
       href='https://youtube.com/@ikurotime'
       class='group'
@@ -114,6 +117,7 @@ import LanguagePicker from '../components/LanguagePicker.astro'
         >
       </div></a
     >
+    <DarkModeToggle />
     <LanguagePicker />
   </div>
 </div>

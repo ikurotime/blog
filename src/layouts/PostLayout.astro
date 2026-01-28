@@ -8,7 +8,7 @@ import ProgressBar from '../components/ProgressBar.astro'
 const { language, frontmatter } = Astro.props
 ---
 
-<html lang={language} class='bg-[#F9F9F8]'>
+<html lang={language} class='bg-[#F9F9F8] dark:bg-[#282828]'>
   <head>
     <meta charset='utf-8' />
     <link
@@ -30,19 +30,23 @@ const { language, frontmatter } = Astro.props
       keywords={frontmatter.keywords}
     />
   </head>
-  <body class='flex flex-col min-h-screen bg-[#FDFDFC] w-full gap-8'>
+  <body
+    class='flex flex-col min-h-screen bg-[#FDFDFC] dark:bg-[#282828] w-full gap-8'
+  >
     <ProgressBar />
     <Navbar />
     <div class='flex flex-col w-full max-w-[920px] m-auto'>
       <div class='flex flex-col py-8 gap-4 max-sm:px-4'>
-        <h1 class='text-2xl text-[#1b1b18] md:text-4xl font-bold mb-2'>
+        <h1
+          class='text-2xl text-[#1b1b18] dark:text-[#EBDBB2] md:text-4xl font-bold mb-2'
+        >
           {frontmatter.title}
         </h1>
         <div class='flex gap-2 items-center'>
-          <span class='text-[#1b1b18]'>
+          <span class='text-[#1b1b18] dark:text-[#EBDBB2]'>
             {new Date(frontmatter.pubDate).toLocaleDateString()} -
           </span>
-          <span class='text-[#1b1b18]'>
+          <span class='text-[#1b1b18] dark:text-[#EBDBB2]'>
             {frontmatter.tags.join(', ')}
           </span>
         </div>
@@ -71,6 +75,7 @@ const { language, frontmatter } = Astro.props
     </div>
     <div class='flex flex-col w-full max-w-[960px] m-auto pb-12'>
       <script
+        id='giscus-script'
         src='https://giscus.app/client.js'
         data-repo='ikurotime/blog-comments'
         data-repo-id='R_kgDOPtEulQ'
@@ -86,11 +91,41 @@ const { language, frontmatter } = Astro.props
         data-loading='lazy'
         crossorigin='anonymous'
         async></script>
+      <script>
+        // Update giscus theme based on dark mode
+        const updateGiscusTheme = () => {
+          const isDark = document.documentElement.classList.contains('dark')
+          const giscusScript = document.getElementById('giscus-script')
+          if (giscusScript) {
+            giscusScript.setAttribute('data-theme', isDark ? 'dark' : 'light')
+            // Reload giscus if it's already loaded
+            if (window.giscus) {
+              window.giscus.reset()
+            }
+          }
+        }
+
+        // Update on page load
+        updateGiscusTheme()
+
+        // Watch for dark mode changes
+        const observer = new MutationObserver(() => {
+          updateGiscusTheme()
+        })
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['class']
+        })
+      </script>
 
       <style is:global>
         html,
         body {
           background-color: #f9f9f8;
+        }
+        html.dark,
+        html.dark body {
+          background-color: #282828;
         }
         body {
           font-family: 'Aleo Variable', serif;
@@ -101,6 +136,19 @@ const { language, frontmatter } = Astro.props
           border: 1px solid #232323 !important;
           white-space: pre-wrap;
           padding: 1em;
+        }
+        html.dark pre:has(> code) {
+          background-color: #323232 !important;
+          border: 1px solid #71675e !important;
+        }
+        /* Shiki dual-theme dark mode support */
+        html.dark .astro-code,
+        html.dark .astro-code span {
+          color: var(--shiki-dark) !important;
+          background-color: var(--shiki-dark-bg) !important;
+          font-style: var(--shiki-dark-font-style) !important;
+          font-weight: var(--shiki-dark-font-weight) !important;
+          text-decoration: var(--shiki-dark-text-decoration) !important;
         }
       </style>
     </div>

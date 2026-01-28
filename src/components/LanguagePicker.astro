@@ -12,8 +12,8 @@ const language = getLangFromUrl(Astro.url)
           href={`/${lang}/`}
           class={
             lang === language
-              ? 'border-b border-b-neutral-950 '
-              : 'text-neutral-600 hover:opacity-70'
+              ? 'border-b border-b-neutral-950 dark:border-b-[#EBDBB2] '
+              : 'text-neutral-600 dark:text-[#857B72] hover:opacity-70'
           }
         >
           {label}
