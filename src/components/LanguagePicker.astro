@@ -1,24 +1,32 @@
 ---
 import { languages } from '../i18n/ui'
 import { getLangFromUrl } from '../i18n/utils'
-const language = getLangFromUrl(Astro.url)
+
+const current = getLangFromUrl(Astro.url)
+const entries = Object.entries(languages) as [keyof typeof languages, string][]
 ---
 
-<ul class='flex gap-4'>
+<div class='flex items-center gap-1 font-mono text-xs'>
   {
-    Object.entries(languages).map(([lang, label]) => (
-      <li>
+    entries.map(([code], i) => (
+      <>
+        {i > 0 && (
+          <span class='text-muted/40' aria-hidden='true'>
+            /
+          </span>
+        )}
         <a
-          href={`/${lang}/`}
-          class={
-            lang === language
-              ? 'border-b border-b-neutral-950 dark:border-b-[#EBDBB2] '
-              : 'text-neutral-600 dark:text-[#857B72] hover:opacity-70'
-          }
+          href={`/${code}/`}
+          class:list={[
+            'transition-colors',
+            code === current
+              ? 'text-ink'
+              : 'text-muted hover:text-ink'
+          ]}
         >
-          {label}
+          {code}
         </a>
-      </li>
+      </>
     ))
   }
-</ul>
+</div>

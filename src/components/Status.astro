@@ -1,0 +1,95 @@
+---
+interface Props {
+  size?: 'sm' | 'md'
+  className?: string
+}
+
+const { size = 'md', className = '' } = Astro.props as Props
+
+const textSize = size === 'sm' ? 'text-xs' : 'text-xs'
+const dotSize = size === 'sm' ? 'h-1.5 w-1.5' : 'h-1.5 w-1.5'
+---
+
+<span
+  class:list={[
+    'inline-flex items-center gap-2 font-mono text-muted',
+    textSize,
+    className
+  ]}
+  data-status-root
+>
+  <span
+    class:list={[
+      'relative inline-flex rounded-full bg-emerald-500 pulse-dot text-emerald-500',
+      dotSize
+    ]}
+    aria-hidden='true'></span>
+  <span data-status-text>Available for work</span>
+</span>
+
+<script is:inline>
+  ;(function () {
+    const STATUSES = {
+      en: [
+        'Available for work',
+        'Getting some coffee',
+        'Fighting git conflicts',
+        'Stealing designs',
+        'Refactoring the refactor',
+        'Reading the docs (finally)',
+        'Touching grass',
+        'Renaming variables',
+        'Debugging in production',
+        'Crying over CSS',
+        'Vim-ing furiously',
+        'Squashing commits',
+        'Procrastinating productively',
+        'Hunting null pointers',
+        'Convincing the linter',
+        'Naming things (the hard part)',
+        'Migrating the migration',
+        'Reading HN one more time',
+        'Ignoring TypeScript errors',
+        'Tweaking the kerning',
+        'Drinking too much tea',
+        'Pushing to main on a Friday',
+        'Rewriting it in Rust',
+        'Pretending to work',
+        'Closing 47 browser tabs'
+      ],
+      es: [
+        'Disponible para trabajar',
+        'Tomando un café',
+        'Peleándome con git',
+        'Robando diseños',
+        'Refactorizando el refactor',
+        'Leyendo la doc (al fin)',
+        'Tocando hierba',
+        'Renombrando variables',
+        'Debuggeando en producción',
+        'Llorando con CSS',
+        'Vim-eando furiosamente',
+        'Squasheando commits',
+        'Procrastinando productivamente',
+        'Cazando null pointers',
+        'Convenciendo al linter',
+        'Nombrando cosas (lo difícil)',
+        'Migrando la migración',
+        'Leyendo HN otra vez',
+        'Ignorando errores de TS',
+        'Ajustando el kerning',
+        'Bebiendo demasiado té',
+        'Pusheando a main un viernes',
+        'Reescribiéndolo en Rust',
+        'Fingiendo trabajar',
+        'Cerrando 47 pestañas'
+      ]
+    }
+    const lang = (document.documentElement.lang || 'en').slice(0, 2)
+    const list = STATUSES[lang] || STATUSES.en
+    const pick = list[Math.floor(Math.random() * list.length)]
+    document.querySelectorAll('[data-status-text]').forEach((el) => {
+      el.textContent = pick
+    })
+  })()
+</script>

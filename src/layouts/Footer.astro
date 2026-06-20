@@ -1,15 +1,11 @@
 ---
-//footer minimalistic
+import Status from '../components/Status.astro'
+const year = new Date().getFullYear()
 ---
 
 <footer
-  class='flex justify-between items-center w-full border-t border-[#EDEDEB] dark:border-[#71675E] pb-8 pt-4 px-6 text-sm bg-[#F9F9F8] dark:bg-[#282828] text-[#1b1b18] dark:text-[#EBDBB2]'
+  class='mt-16 flex items-center justify-between border-t border-line py-6 text-xs text-muted font-mono'
 >
-  <div class='flex justify-between items-center w-full max-w-[925px] mx-auto'>
-    <div class='flex items-center space-x-4'>
-      <p>davidhuertas.dev</p>
-    </div>
-
-    <div class='flex items-center space-x-6'>building things with ❤️</div>
-  </div>
+  <span>© {year} David Huertas</span>
+  <Status />
 </footer>

@@ -1,60 +1,180 @@
 ---
 import { getCollection } from 'astro:content'
 import Card from '../layouts/Card.astro'
+import ProjectCard from './ProjectCard.astro'
+import Status from './Status.astro'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 
-const getPath = (page: { slug: string }) => {
-  const [lang, ...slug] = page.slug.split('/')
-  return `/${lang}/posts/${slug.join('/') || ''}`
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const years = new Date().getFullYear() - 2021
+
+const allPosts = await getCollection('posts')
+const posts = allPosts
+  .filter((p) => p.data.draft === false && p.data.language === lang)
+  .sort(
+    (a, b) =>
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+  )
+  .slice(0, 5)
+
+const getPostPath = (page: { slug: string }) => {
+  const [pageLang, ...slug] = page.slug.split('/')
+  return `/${pageLang}/posts/${slug.join('/') || ''}`
 }
 
-const lang = getLangFromUrl(Astro.url)
-const posts = await getCollection('posts')
-const years = new Date().getFullYear() - 2021
+const projects = [
+  {
+    title: 'Kitmo',
+    description: 'A all in one tool for creators',
+    tags: ['React'],
+    href: 'https://github.com/ikurotime'
+  },
+  {
+    title: 'Rust for JS Devs',
+    description: 'A learning resource for JavaScript developers to learn Rust.',
+    tags: ['Astro'],
+    href: 'https://rustforjsdevs.com/'
+  },
+  {
+    title: 'Go API · Hexagonal Architecture',
+    description: 'A reference Go API built around hexagonal architecture.',
+    tags: ['Go', 'Architecture'],
+    href: 'https://github.com/ikurotime/go_api_clean_architecture'
+  }
+]
+
+const socials = [
+  { label: 'GitHub', href: 'https://github.com/ikurotime' },
+  { label: 'Twitter', href: 'https://twitter.com/ikurotime' },
+  { label: 'YouTube', href: 'https://youtube.com/@ikurotime' },
+  { label: 'Twitch', href: 'https://twitch.tv/ikurotime' },
+  { label: 'Email', href: 'mailto:kuro@maisa.ai' }
+]
+
+const bio = t('hero.bio').replace('{years}', String(years))
 ---
 
+<section
+  class='pt-12 sm:pt-20 reveal'
+  style='--reveal-delay: 80ms'
+  aria-labelledby='hero-heading'
+>
+  <div class='flex items-center gap-2 font-mono text-muted text-xs'>
+    <Status />
+    <span class='text-muted/40'>·</span>
+    <span>{t('hero.location')}</span>
+  </div>
+
+  <h1
+    id='hero-heading'
+    class='mt-6 font-semibold text-ink text-3xl sm:text-4xl tracking-tight'
+  >
+    David Huertas
+  </h1>
+  <p class='mt-1 font-mono text-muted text-sm'>
+    {t('hero.role')}
+  </p>
+
+  <p class='mt-6 text-[15px] text-ink/80 leading-7'>
+    {bio}
+  </p>
+</section>
+
 {
-  lang === 'en' ? (
-    <p class='text-[#1b1b18] dark:text-[#EBDBB2] text-lg my-12 pl-5'>
-      I'm a passionate coder with +{years} years of experience. Based in
-      Valencia, Spain.
-      <br />I like open source software, great UX/UI design and a great
-      napolitan pizza. I also create content. vim user btw.
-    </p>
-  ) : (
-    <p class='text-[#1b1b18] dark:text-[#EBDBB2] text-lg my-12 pl-5'>
-      Soy un apasionado desarrollador de software con +{years} años de
-      experiencia. Residiendo en Valencia, España.
-      <br />
-      Me gusta el software de código abierto, el buen diseño de UX/UI y una
-      buena pizza napolitana. También creo contenido. vim user btw.
-    </p>
-  )
-}
-<div class='flex flex-col flex-1 mb-12'>
-  <ul class='gap-4 grid grid-cols-1 md:grid-cols-1'>
-    {
-      posts
-        .filter(
-          (post) => post.data.draft === false && post.data.language === lang
-        )
-        .sort(
-          (a, b) =>
-            new Date(b.data.pubDate).getTime() -
-            new Date(a.data.pubDate).getTime()
-        )
-        .map((post) => (
-          <li class='flex w-full flex-col'>
-            <a href={getPath(post)}>
+  posts.length > 0 && (
+    <section
+      class='mt-16 reveal'
+      style='--reveal-delay: 180ms'
+      aria-labelledby='writing-heading'
+    >
+      <div class='flex justify-between items-baseline mb-2'>
+        <h2
+          id='writing-heading'
+          class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
+        >
+          {t('section.writing')}
+        </h2>
+      </div>
+      <ul class='flex flex-col'>
+        {posts.map((post) => (
+          <li>
+            <a
+              href={getPostPath(post)}
+              class='block rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/30'
+            >
               <Card
                 title={post.data.title}
                 description={post.data.description}
-                tags={post.data.tags}
-                pubDate={new Date(post.data.pubDate).toLocaleDateString()}
+                pubDate={new Date(post.data.pubDate).toLocaleDateString(
+                  lang === 'es' ? 'es-ES' : 'en-US',
+                  { year: 'numeric', month: 'short', day: 'numeric' }
+                )}
               />
             </a>
           </li>
-        ))
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<section
+  class='mt-16 reveal'
+  style='--reveal-delay: 320ms'
+  aria-labelledby='projects-heading'
+>
+  <div class='flex justify-between items-baseline mb-5'>
+    <h2
+      id='projects-heading'
+      class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
+    >
+      {t('section.projects')}
+    </h2>
+  </div>
+  <ul class='gap-3 grid grid-cols-1'>
+    {
+      projects.map((project, i) => (
+        <li class='reveal' style={`--reveal-delay: ${360 + i * 80}ms`}>
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            tags={project.tags}
+            href={project.href}
+          />
+        </li>
+      ))
     }
   </ul>
-</div>
+</section>
+
+<section
+  class='mt-16 reveal'
+  style='--reveal-delay: 420ms'
+  aria-labelledby='connect-heading'
+>
+  <h2
+    id='connect-heading'
+    class='mb-4 font-mono text-muted text-xs uppercase tracking-[0.18em]'
+  >
+    {t('section.connect')}
+  </h2>
+  <ul class='flex flex-wrap gap-x-5 gap-y-2 text-sm'>
+    {
+      socials.map((s) => (
+        <li>
+          <a
+            href={s.href}
+            target={s.href.startsWith('http') ? '_blank' : undefined}
+            rel='noreferrer'
+            class='text-ink link-underline'
+          >
+            {s.label}
+            <span class='ml-1 text-muted'>↗</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

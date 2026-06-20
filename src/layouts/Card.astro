@@ -1,75 +1,31 @@
 ---
-const { title, description, tags } = Astro.props
-
-function getTagIcon(tag: string): string {
-  switch (tag.toLowerCase()) {
-    case 'react':
-    case 'hooks':
-    case 'performance':
-    case 'create-react-app':
-      return '/icons/react.svg'
-    case 'vue':
-      return '/icons/vue.svg'
-    case 'angular':
-      return '/icons/angular.svg'
-    case 'javascript':
-    case 'js':
-      return '/icons/javascript.svg'
-    case 'typescript':
-    case 'ts':
-      return '/icons/typescript.svg'
-    case 'python':
-      return '/icons/python.svg'
-    case 'node':
-    case 'nodejs':
-      return '/icons/nodejs.svg'
-    case 'css':
-      return '/icons/css.svg'
-    case 'html':
-      return '/icons/html.svg'
-    case 'astro':
-      return '/icons/astro.svg'
-    case 'tailwind':
-      return '/icons/tailwind.svg'
-    case 'docker':
-    case 'vps':
-      return '/icons/docker.svg'
-    case 'github':
-    case 'github actions':
-    case 'ci/cd':
-      return '/icons/github.svg'
-    case 'gitlab':
-      return '/icons/gitlab.svg'
-    case 'bitbucket':
-      return '/icons/bitbucket.svg'
-    case 'jira':
-    default:
-      return '/icons/default.svg'
-  }
+interface Props {
+  title: string
+  description: string
+  pubDate?: string
 }
+
+const { title, description, pubDate } = Astro.props as Props
 ---
 
-<div
-  class='flex group py-4 relative px-5 flex-col gap-1 rounded-md bg-[#FDFDFC] dark:bg-[#282828] border border-white dark:border-[#71675E] hover:border-gray-300 dark:hover:border-[#857B72] hover:bg-[#f5f5f2] dark:hover:bg-[#323232]'
+<article
+  class='group flex flex-col gap-1 border-b border-line py-4 transition-colors hover:border-ink/40'
 >
-  <div class='flex gap-2 items-center'>
-    <svg
-      class='opacity-0 group-hover:opacity-100 absolute left-2'
-      xmlns='http://www.w3.org/2000/svg'
-      width='14'
-      height='14'
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      stroke-width='2'
-      stroke-linecap='round'
-      stroke-linejoin='round'
-      class='lucide lucide-chevron-right-icon lucide-chevron-right'
-      ><path d='m9 18 6-6-6-6'></path></svg
+  <div class='flex items-baseline justify-between gap-4'>
+    <h3
+      class='text-[15px] font-medium text-ink transition-transform group-hover:translate-x-0.5'
     >
-    <span class='text-[#1b1b18] dark:text-[#EBDBB2] text-md font-bold'
-      >{title}</span
-    >
+      {title}
+    </h3>
+    {
+      pubDate && (
+        <time class='shrink-0 font-mono text-[11px] text-muted'>
+          {pubDate}
+        </time>
+      )
+    }
   </div>
-  <span class='text-[#8c8c8c] dark:text-[#857B72] text-sm'>{description}</span>
-</div>
+  <p class='text-sm text-muted line-clamp-2'>
+    {description}
+  </p>
+</article>

@@ -1,50 +1,68 @@
 ---
-import '@fontsource-variable/aleo'
+import '@fontsource-variable/inter'
+import '../styles/global.css'
 import Navbar from './Navbar.astro'
 import Footer from './Footer.astro'
-const { title, language } = Astro.props
+
+interface Props {
+  title: string
+  language: 'en' | 'es'
+  description?: string
+}
+
+const {
+  title,
+  language,
+  description = 'David Huertas — Software engineer based in Valencia, Spain. Building things on the web.'
+} = Astro.props as Props
+
+const permalink = new URL(Astro.url.pathname, Astro.site).href
 ---
 
-<html lang={language}>
+<html lang={language} class='bg-bg'>
   <head>
     <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <meta name='generator' content={Astro.generator} />
     <link
       rel='icon'
       href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>'
     />
-    <meta name='viewport' content='width=device-width' />
-    <meta name='generator' content={Astro.generator} />
-    <link
-      rel='preload'
-      href='/node_modules/@fontsource-variable/aleo/files/aleo-latin-wght-normal.woff2'
-      as='font'
-      type='font/woff2'
-      crossorigin
-    />
     <title>{title}</title>
+    <meta name='description' content={description} />
+    <link rel='canonical' href={permalink} />
+
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content={permalink} />
+    <meta property='og:title' content={title} />
+    <meta property='og:description' content={description} />
+
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content={title} />
+    <meta name='twitter:description' content={description} />
+
+    <script is:inline>
+      ;(function () {
+        try {
+          const stored = localStorage.getItem('theme')
+          const prefersDark = window.matchMedia(
+            '(prefers-color-scheme: dark)'
+          ).matches
+          const theme = stored ? stored : prefersDark ? 'dark' : 'light'
+          if (theme === 'dark') document.documentElement.classList.add('dark')
+        } catch (_) {}
+      })()
+    </script>
   </head>
-  <body class='flex flex-col bg-[#FDFDFC] dark:bg-[#282828] text-[#1b1b18] dark:text-[#EBDBB2]'>
-    <Navbar />
-    <div class='flex flex-col w-full max-w-[960px] mx-auto max-sm:px-4'>
-      <div class='max-w-[680px]'>
+  <body
+    class='font-sans bg-bg text-ink antialiased selection:bg-ink selection:text-bg'
+  >
+    <div class='mx-auto w-full max-w-[640px] px-6 sm:px-8'>
+      <Navbar />
+      <main class='pb-24'>
         <slot />
-      </div>
+      </main>
+      <Footer />
     </div>
-    <Footer />
-    <style>
-      html,
-      body {
-        background-color: #f9f9f8;
-      }
-
-      html.dark,
-      html.dark body {
-        background-color: #282828;
-      }
-
-      body {
-        font-family: 'Aleo Variable', sans-serif;
-      }
-    </style>
   </body>
 </html>

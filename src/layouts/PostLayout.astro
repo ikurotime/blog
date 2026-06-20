@@ -1,157 +1,165 @@
 ---
+import '@fontsource-variable/inter'
+import '../styles/global.css'
 import Prose from './Prose.astro'
-import '@fontsource-variable/aleo'
 import Head from '../components/Head.astro'
 import Footer from './Footer.astro'
 import Navbar from './Navbar.astro'
 import ProgressBar from '../components/ProgressBar.astro'
+
 const { language, frontmatter } = Astro.props
 ---
 
-<html lang={language} class='bg-[#F9F9F8] dark:bg-[#282828]'>
+<html lang={language} class='bg-bg'>
   <head>
     <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <meta name='generator' content={Astro.generator} />
     <link
       rel='icon'
       href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>'
-    />
-    <meta name='viewport' content='width=device-width' />
-    <meta name='generator' content={Astro.generator} />
-    <link
-      rel='preload'
-      href='/node_modules/@fontsource-variable/aleo/files/aleo-latin-wght-normal.woff2'
-      as='font'
-      type='font/woff2'
-      crossorigin
     />
     <Head
       title={frontmatter.title}
       description={frontmatter.description}
       keywords={frontmatter.keywords}
     />
+    <script is:inline>
+      ;(function () {
+        try {
+          const stored = localStorage.getItem('theme')
+          const prefersDark = window.matchMedia(
+            '(prefers-color-scheme: dark)'
+          ).matches
+          const theme = stored ? stored : prefersDark ? 'dark' : 'light'
+          if (theme === 'dark') document.documentElement.classList.add('dark')
+        } catch (_) {}
+      })()
+    </script>
   </head>
   <body
-    class='flex flex-col min-h-screen bg-[#FDFDFC] dark:bg-[#282828] w-full gap-8'
+    class='font-sans bg-bg text-ink antialiased'
   >
     <ProgressBar />
-    <Navbar />
-    <div class='flex flex-col w-full max-w-[920px] m-auto'>
-      <div class='flex flex-col py-8 gap-4 max-sm:px-4'>
-        <h1
-          class='text-2xl text-[#1b1b18] dark:text-[#EBDBB2] md:text-4xl font-bold mb-2'
+    <div class='mx-auto w-full max-w-[680px] px-6 sm:px-8'>
+      <Navbar />
+      <article class='pb-16'>
+        <header
+          class='flex flex-col gap-3 border-b border-line pb-8 pt-8 reveal'
+          style='--reveal-delay: 60ms'
         >
-          {frontmatter.title}
-        </h1>
-        <div class='flex gap-2 items-center'>
-          <span class='text-[#1b1b18] dark:text-[#EBDBB2]'>
-            {new Date(frontmatter.pubDate).toLocaleDateString()} -
-          </span>
-          <span class='text-[#1b1b18] dark:text-[#EBDBB2]'>
-            {frontmatter.tags.join(', ')}
-          </span>
-        </div>
-      </div>
-      <div class='flex flex-col m-auto gap-2 max-sm:px-4 max-w-[920px] pb-12'>
-        <Prose frontmatter={frontmatter}>
+          <div
+            class='flex items-center gap-3 font-mono text-[11px] text-muted'
+          >
+            <time>
+              {new Date(frontmatter.pubDate).toLocaleDateString(
+                language === 'es' ? 'es-ES' : 'en-US',
+                { year: 'numeric', month: 'short', day: 'numeric' }
+              )}
+            </time>
+            {
+              frontmatter.tags?.length > 0 && (
+                <>
+                  <span class='text-muted/40'>·</span>
+                  <span>{frontmatter.tags.join(', ')}</span>
+                </>
+              )
+            }
+          </div>
+          <h1
+            class='text-2xl sm:text-3xl font-semibold tracking-tight text-ink'
+          >
+            {frontmatter.title}
+          </h1>
           {
-            frontmatter.wip ? (
-              frontmatter.language === 'es' ? (
-                <div class='text-orange-400 p-4 rounded-md bg-orange-900/50 m-4'>
-                  🛠️ Kuro está trabajando en este post. Todo deberia de
-                  funcionar como está indicado, pero puede que haya algunos
-                  errores.
-                </div>
-              ) : (
-                <div class='text-orange-400 p-4 rounded-md bg-orange-900/50 m-4'>
-                  🛠️ Kuro is working on this post. Everything should work as
-                  indicated, but there may be some errors.
+            frontmatter.description && (
+              <p class='text-[15px] text-muted'>
+                {frontmatter.description}
+              </p>
+            )
+          }
+        </header>
+
+        <div
+          class='pt-8 reveal'
+          style='--reveal-delay: 140ms'
+        >
+          <Prose frontmatter={frontmatter}>
+            {
+              frontmatter.wip && (
+                <div
+                  class='mb-6 rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300'
+                >
+                  {frontmatter.language === 'es'
+                    ? '🛠️ Kuro está trabajando en este post. Todo deberia de funcionar como está indicado, pero puede que haya algunos errores.'
+                    : '🛠️ Kuro is working on this post. Everything should work as indicated, but there may be some errors.'}
                 </div>
               )
-            ) : null
-          }
-          <slot />
-        </Prose>
-      </div>
-    </div>
-    <div class='flex flex-col w-full max-w-[960px] m-auto pb-12'>
-      <script
-        id='giscus-script'
-        src='https://giscus.app/client.js'
-        data-repo='ikurotime/blog-comments'
-        data-repo-id='R_kgDOPtEulQ'
-        data-category='Announcements'
-        data-category-id='DIC_kwDOPtEulc4CvOdX'
-        data-mapping='pathname'
-        data-strict='0'
-        data-reactions-enabled='1'
-        data-emit-metadata='0'
-        data-input-position='top'
-        data-theme='light'
-        data-lang='en'
-        data-loading='lazy'
-        crossorigin='anonymous'
-        async></script>
-      <script>
-        // Update giscus theme based on dark mode
-        const updateGiscusTheme = () => {
-          const isDark = document.documentElement.classList.contains('dark')
-          const giscusScript = document.getElementById('giscus-script')
-          if (giscusScript) {
-            giscusScript.setAttribute('data-theme', isDark ? 'dark' : 'light')
-            // Reload giscus if it's already loaded
-            if (window.giscus) {
-              window.giscus.reset()
             }
-          }
-        }
+            <slot />
+          </Prose>
+        </div>
 
-        // Update on page load
-        updateGiscusTheme()
-
-        // Watch for dark mode changes
-        const observer = new MutationObserver(() => {
-          updateGiscusTheme()
-        })
-        observer.observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['class']
-        })
-      </script>
-
-      <style is:global>
-        html,
-        body {
-          background-color: #f9f9f8;
-        }
-        html.dark,
-        html.dark body {
-          background-color: #282828;
-        }
-        body {
-          font-family: 'Aleo Variable', serif;
-        }
-        /* Fix <pre> tag gap when code is next element. */
-        pre:has(> code) {
-          background-color: transparent !important;
-          border: 1px solid #232323 !important;
-          white-space: pre-wrap;
-          padding: 1em;
-        }
-        html.dark pre:has(> code) {
-          background-color: #323232 !important;
-          border: 1px solid #71675e !important;
-        }
-        /* Shiki dual-theme dark mode support */
-        html.dark .astro-code,
-        html.dark .astro-code span {
-          color: var(--shiki-dark) !important;
-          background-color: var(--shiki-dark-bg) !important;
-          font-style: var(--shiki-dark-font-style) !important;
-          font-weight: var(--shiki-dark-font-weight) !important;
-          text-decoration: var(--shiki-dark-text-decoration) !important;
-        }
-      </style>
+        <div class='mt-12'>
+          <script
+            id='giscus-script'
+            src='https://giscus.app/client.js'
+            data-repo='ikurotime/blog-comments'
+            data-repo-id='R_kgDOPtEulQ'
+            data-category='Announcements'
+            data-category-id='DIC_kwDOPtEulc4CvOdX'
+            data-mapping='pathname'
+            data-strict='0'
+            data-reactions-enabled='1'
+            data-emit-metadata='0'
+            data-input-position='top'
+            data-theme='light'
+            data-lang='en'
+            data-loading='lazy'
+            crossorigin='anonymous'
+            async></script>
+        </div>
+      </article>
+      <Footer />
     </div>
-    <Footer />
+
+    <script>
+      const updateGiscusTheme = () => {
+        const isDark = document.documentElement.classList.contains('dark')
+        const giscus = document.getElementById('giscus-script')
+        if (giscus) {
+          giscus.setAttribute('data-theme', isDark ? 'dark' : 'light')
+          // @ts-ignore
+          if (window.giscus) window.giscus.reset()
+        }
+      }
+      updateGiscusTheme()
+      new MutationObserver(updateGiscusTheme).observe(
+        document.documentElement,
+        { attributes: true, attributeFilter: ['class'] }
+      )
+    </script>
+
+    <style is:global>
+      pre:has(> code) {
+        background-color: transparent !important;
+        border: 1px solid #e7e5e4 !important;
+        white-space: pre-wrap;
+        padding: 1em;
+        border-radius: 6px;
+      }
+      html.dark pre:has(> code) {
+        background-color: #131313 !important;
+        border-color: #1f1f1f !important;
+      }
+      html.dark .astro-code,
+      html.dark .astro-code span {
+        color: var(--shiki-dark) !important;
+        background-color: var(--shiki-dark-bg) !important;
+        font-style: var(--shiki-dark-font-style) !important;
+        font-weight: var(--shiki-dark-font-weight) !important;
+        text-decoration: var(--shiki-dark-text-decoration) !important;
+      }
+    </style>
   </body>
 </html>
