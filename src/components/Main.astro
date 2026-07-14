@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content'
 import Card from '../layouts/Card.astro'
 import ProjectCard from './ProjectCard.astro'
+import ExperimentCard from './ExperimentCard.astro'
+import { experiments } from '../data/experiments'
 import Status from './Status.astro'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 
@@ -80,6 +82,40 @@ const bio = t('hero.bio').replace('{years}', String(years))
   <p class='mt-6 text-[15px] text-ink/80 leading-7'>
     {bio}
   </p>
+</section>
+
+<section
+  class='mt-16 reveal'
+  style='--reveal-delay: 160ms'
+  aria-labelledby='experiments-heading'
+>
+  <div class='mb-5 flex flex-col gap-1'>
+    <h2
+      id='experiments-heading'
+      class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
+    >
+      {t('section.experiments')}
+    </h2>
+    <p class='text-sm text-muted'>{t('section.experiments.desc')}</p>
+  </div>
+  <ul class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+    {
+      experiments.map((exp, i) => {
+        const Demo = exp.Demo
+        return (
+          <li class='reveal' style={`--reveal-delay: ${200 + i * 40}ms`}>
+            <ExperimentCard
+              title={exp.title}
+              description={exp.description}
+              href={`/${lang}/experiments/${exp.slug}`}
+            >
+              <Demo />
+            </ExperimentCard>
+          </li>
+        )
+      })
+    }
+  </ul>
 </section>
 
 {

@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string
+  description: string
+  href?: string
+}
+
+const { title, description, href } = Astro.props as Props
+---
+
+<div
+  class='group flex flex-col gap-4 rounded-lg border border-line p-4 transition-colors hover:border-ink/40'
+>
+  <div
+    class='flex min-h-[112px] items-center justify-center rounded-md border border-line/70 bg-ink/[0.015] px-4 py-8'
+  >
+    <slot />
+  </div>
+  <div class='flex flex-col gap-1'>
+    {
+      href ? (
+        <a
+          href={href}
+          class='flex items-start justify-between gap-3 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/30'
+        >
+          <h3 class='text-[15px] font-medium text-ink transition-transform group-hover:translate-x-0.5'>
+            {title}
+          </h3>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='14'
+            height='14'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            class='mt-0.5 shrink-0 text-muted transition-all group-hover:translate-x-0.5 group-hover:text-ink'
+            aria-hidden='true'
+          >
+            <path d='M5 12h14' />
+            <path d='m12 5 7 7-7 7' />
+          </svg>
+        </a>
+      ) : (
+        <h3 class='text-[15px] font-medium text-ink'>{title}</h3>
+      )
+    }
+    <p class='text-sm text-muted'>{description}</p>
+  </div>
+</div>

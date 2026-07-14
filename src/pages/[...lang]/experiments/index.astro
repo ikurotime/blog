@@ -1,0 +1,55 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro'
+import ExperimentCard from '../../../components/ExperimentCard.astro'
+import { experiments } from '../../../data/experiments'
+import { ui } from '../../../i18n/ui'
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils'
+
+export function getStaticPaths() {
+  return Object.keys(ui).map((lang) => ({ params: { lang } }))
+}
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<MainLayout title={`${t('section.experiments')} — David Huertas`} language={lang}>
+  <section class='pt-12 sm:pt-16 reveal' style='--reveal-delay: 60ms'>
+    <nav
+      class='flex items-center gap-2 font-mono text-muted text-xs'
+      aria-label='Breadcrumb'
+    >
+      <a href={`/${lang}/`} class='link-underline'>kuro</a>
+      <span class='text-muted/40'>/</span>
+      <span class='text-ink'>{t('section.experiments').toLowerCase()}</span>
+    </nav>
+
+    <h1 class='mt-6 font-semibold text-ink text-3xl sm:text-4xl tracking-tight'>
+      {t('section.experiments')}
+    </h1>
+    <p class='mt-3 text-[15px] text-ink/80 leading-7'>
+      {t('section.experiments.desc')}
+    </p>
+  </section>
+
+  <section class='mt-12 reveal' style='--reveal-delay: 140ms'>
+    <ul class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+      {
+        experiments.map((exp, i) => {
+          const Demo = exp.Demo
+          return (
+            <li class='reveal' style={`--reveal-delay: ${180 + i * 40}ms`}>
+              <ExperimentCard
+                title={exp.title}
+                description={exp.description}
+                href={`/${lang}/experiments/${exp.slug}`}
+              >
+                <Demo />
+              </ExperimentCard>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </section>
+</MainLayout>

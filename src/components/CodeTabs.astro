@@ -1,0 +1,95 @@
+---
+import { Code } from 'astro:components'
+
+export interface CodeFile {
+  name: string
+  lang: string
+  code: string
+}
+
+interface Props {
+  files: CodeFile[]
+}
+
+const { files } = Astro.props as Props
+---
+
+<div
+  class='code-surface overflow-hidden rounded-lg border border-line'
+  data-code-tabs
+>
+  <div
+    class='flex items-center justify-between gap-2 border-b border-line bg-ink/[0.02]'
+  >
+    <div role='tablist' class='flex overflow-x-auto'>
+      {
+        files.map((f, i) => (
+          <button
+            type='button'
+            role='tab'
+            data-tab={i}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            class='whitespace-nowrap border-b-2 border-transparent px-3 py-2 font-mono text-xs text-muted transition-colors hover:text-ink aria-selected:border-ink aria-selected:text-ink'
+          >
+            {f.name}
+          </button>
+        ))
+      }
+    </div>
+    <button
+      type='button'
+      data-copy
+      class='mr-2 shrink-0 rounded-md border border-line px-2 py-1 font-mono text-[11px] text-muted transition-colors hover:border-ink/40 hover:text-ink'
+    >
+      <span data-copy-label>Copy</span>
+    </button>
+  </div>
+  <div>
+    {
+      files.map((f, i) => (
+        <div
+          data-panel={i}
+          data-code={f.code}
+          class:list={[i !== 0 && 'hidden']}
+        >
+          <Code
+            code={f.code}
+            lang={f.lang as any}
+            themes={{ dark: 'github-dark', light: 'github-light' }}
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-code-tabs]').forEach((root) => {
+    const tabs = root.querySelectorAll<HTMLElement>('[data-tab]')
+    const panels = root.querySelectorAll<HTMLElement>('[data-panel]')
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const idx = tab.dataset.tab
+        tabs.forEach((t) =>
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false')
+        )
+        panels.forEach((p) => p.classList.toggle('hidden', p.dataset.panel !== idx))
+      })
+    })
+
+    const copyBtn = root.querySelector<HTMLElement>('[data-copy]')
+    const label = root.querySelector<HTMLElement>('[data-copy-label]')
+    copyBtn?.addEventListener('click', async () => {
+      const active = root.querySelector<HTMLElement>('[data-panel]:not(.hidden)')
+      const code = active?.dataset.code || ''
+      try {
+        await navigator.clipboard.writeText(code)
+        if (label) {
+          label.textContent = 'Copied'
+          window.setTimeout(() => (label.textContent = 'Copy'), 1500)
+        }
+      } catch (_) {}
+    })
+  })
+</script>
