@@ -211,7 +211,14 @@ export default function LanyardBadge({
         />
         <circle ref={grommetRef} r='4' className='fill-ink/60' />
         <defs>
-          <linearGradient id='lanyard-grad' x1='0' y1='0' x2='0' y2='1'>
+          <linearGradient
+            id='lanyard-grad'
+            gradientUnits='userSpaceOnUse'
+            x1='0'
+            y1='0'
+            x2='0'
+            y2='360'
+          >
             <stop offset='0' stopColor='#6366f1' />
             <stop offset='1' stopColor='#0ea5e9' />
           </linearGradient>
