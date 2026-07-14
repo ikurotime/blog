@@ -4,6 +4,7 @@ import Card from '../layouts/Card.astro'
 import ProjectCard from './ProjectCard.astro'
 import ExperimentCard from './ExperimentCard.astro'
 import { experiments } from '../data/experiments'
+import ScrambleText from './react/ScrambleText.tsx'
 import Status from './Status.astro'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 
@@ -73,7 +74,7 @@ const bio = t('hero.bio').replace('{years}', String(years))
     id='hero-heading'
     class='mt-6 font-semibold text-ink text-3xl sm:text-4xl tracking-tight'
   >
-    David Huertas
+    <ScrambleText client:load phrases={['David Huertas', 'Kuro']} />
   </h1>
   <p class='mt-1 font-mono text-muted text-sm'>
     {t('hero.role')}

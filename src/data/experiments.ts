@@ -2,6 +2,8 @@ import ScrambleTextDemo from '../components/experiments/ScrambleTextDemo.astro'
 import DynamicButtonDemo from '../components/experiments/DynamicButtonDemo.astro'
 import TicketCardDemo from '../components/experiments/TicketCardDemo.astro'
 import LanyardBadgeDemo from '../components/experiments/LanyardBadgeDemo.astro'
+import ContributionGridDemo from '../components/experiments/ContributionGridDemo.astro'
+import DateSelectorDemo from '../components/experiments/DateSelectorDemo.astro'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import type { CodeFile } from '../components/CodeTabs.astro'
@@ -14,6 +16,8 @@ const scrambleTextSource = readSource('ScrambleText.tsx')
 const dynamicButtonSource = readSource('DynamicButton.tsx')
 const ticketCardSource = readSource('TicketCard.tsx')
 const lanyardBadgeSource = readSource('LanyardBadge.tsx')
+const contributionGridSource = readSource('ContributionGrid.tsx')
+const dateSelectorSource = readSource('DateSelector.tsx')
 
 export interface Experiment {
   slug: string
@@ -76,6 +80,21 @@ import LanyardBadge from '../components/react/LanyardBadge.tsx'
 />
 `
 
+const contributionGridUsage = `---
+import ContributionGrid from '../components/react/ContributionGrid.tsx'
+---
+
+<ContributionGrid client:visible />
+`
+
+const dateSelectorUsage = `---
+import DateSelector from '../components/react/DateSelector.tsx'
+---
+
+<!-- logDays sets how many days back are selectable -->
+<DateSelector client:visible logDays={38} />
+`
+
 export const experiments: Experiment[] = [
   {
     slug: 'event-ticket',
@@ -101,6 +120,32 @@ export const experiments: Experiment[] = [
     files: [
       { name: 'LanyardBadge.tsx', lang: 'tsx', code: lanyardBadgeSource },
       { name: 'Usage.astro', lang: 'astro', code: lanyardBadgeUsage }
+    ]
+  },
+  {
+    slug: 'contribution-grid',
+    title: 'Contribution Grid',
+    description: 'A GitHub-style activity heatmap with hover tooltips.',
+    about:
+      'A GitHub-style contribution heatmap: 53 weeks of days shaded by activity level, with month and weekday labels, a hover tooltip showing the count and date, and a Less → More legend. Colors adapt to light and dark mode. The data is generated on the client to keep dates and levels consistent between server render and hydration.',
+    tags: ['React', 'Data viz'],
+    Demo: ContributionGridDemo,
+    files: [
+      { name: 'ContributionGrid.tsx', lang: 'tsx', code: contributionGridSource },
+      { name: 'Usage.astro', lang: 'astro', code: contributionGridUsage }
+    ]
+  },
+  {
+    slug: 'date-selector',
+    title: 'Date Selector',
+    description: 'A day scrubber with a bell-curve timeline that recenters on your pick.',
+    about:
+      'A date navigator built as a bell-curve timeline. Each day is a bar whose height follows a Gaussian curve peaking at the selected day; picking a day (or stepping with the arrows) re-centers the strip and reshapes the curve with a smooth spring-like transition. Selectable days are solid, the current selection is highlighted, out-of-range days are dimmed, and future days render as dotted placeholders. A horizontal mask fades the strip at both edges.',
+    tags: ['React', 'Interaction'],
+    Demo: DateSelectorDemo,
+    files: [
+      { name: 'DateSelector.tsx', lang: 'tsx', code: dateSelectorSource },
+      { name: 'Usage.astro', lang: 'astro', code: dateSelectorUsage }
     ]
   },
   {

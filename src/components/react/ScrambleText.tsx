@@ -96,7 +96,6 @@ export default function ScrambleText({ text, phrases, className = '' }: Props) {
       io.disconnect()
       if (raf.current) cancelAnimationFrame(raf.current)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onEnter = () => {
@@ -108,7 +107,7 @@ export default function ScrambleText({ text, phrases, className = '' }: Props) {
   return (
     <span
       ref={elRef}
-      className={`inline-block font-mono select-none ${className}`}
+      className={`inline-block select-none ${className}`}
       aria-label={list[0]}
       onMouseEnter={onEnter}
     >

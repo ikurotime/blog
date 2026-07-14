@@ -185,7 +185,6 @@ export default function LanyardBadge({
       badge.removeEventListener('pointerup', onUp)
       badge.removeEventListener('pointercancel', onUp)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
