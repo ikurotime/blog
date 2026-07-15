@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface Props {
   className?: string
@@ -36,6 +36,7 @@ const levelOf = (c: number) =>
   c === 0 ? 0 : c < 3 ? 1 : c < 6 ? 2 : c < 10 ? 3 : 4
 
 export default function ContributionGrid({ className = '' }: Props) {
+  const wrapRef = useRef<HTMLDivElement>(null)
   const [weeks, setWeeks] = useState<Day[][]>([])
   const [total, setTotal] = useState(0)
   const [tip, setTip] = useState<Tooltip>({ show: false, text: '', x: 0, y: 0 })
@@ -87,11 +88,17 @@ export default function ContributionGrid({ className = '' }: Props) {
       day.count === 0
         ? `No contributions · ${label}`
         : `${day.count} contribution${day.count !== 1 ? 's' : ''} · ${label}`
-    setTip({ show: true, text, x: e.clientX, y: e.clientY })
+    const rect = wrapRef.current?.getBoundingClientRect()
+    setTip({
+      show: true,
+      text,
+      x: e.clientX - (rect?.left ?? 0),
+      y: e.clientY - (rect?.top ?? 0)
+    })
   }
 
   return (
-    <div className={`w-full ${className}`}>
+    <div ref={wrapRef} className={`relative w-full ${className}`}>
       <p className='mb-3 font-mono text-xs text-muted'>
         {total.toLocaleString()} contributions in the last year
       </p>
@@ -162,7 +169,7 @@ export default function ContributionGrid({ className = '' }: Props) {
       {/* Tooltip */}
       {tip.show && (
         <div
-          className='pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-[140%] whitespace-nowrap rounded-md bg-ink px-2 py-1 font-mono text-[11px] text-bg shadow-lg'
+          className='pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-[140%] whitespace-nowrap rounded-md bg-ink px-2 py-1 font-mono text-[11px] text-bg shadow-lg'
           style={{ left: tip.x, top: tip.y }}
         >
           {tip.text}

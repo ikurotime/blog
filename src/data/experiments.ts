@@ -15,6 +15,7 @@ const readSource = (file: string) =>
 const scrambleTextSource = readSource('ScrambleText.tsx')
 const dynamicButtonSource = readSource('DynamicButton.tsx')
 const ticketCardSource = readSource('TicketCard.tsx')
+const ticketCardEditableSource = readSource('TicketCardEditable.tsx')
 const lanyardBadgeSource = readSource('LanyardBadge.tsx')
 const contributionGridSource = readSource('ContributionGrid.tsx')
 const dateSelectorSource = readSource('DateSelector.tsx')
@@ -55,16 +56,14 @@ import DynamicButton from '../components/react/DynamicButton.tsx'
 `
 
 const ticketCardUsage = `---
-import TicketCard from '../components/react/TicketCard.tsx'
+// Editable island: inputs drive the ticket, client-side only.
+import TicketCardEditable from '../components/react/TicketCardEditable.tsx'
 ---
 
-<TicketCard
-  client:visible
-  name="David Huertas"
-  handle="@ikurotime"
-  eventName="Launch Week"
-  ticketNumber={1337}
-/>
+<TicketCardEditable client:visible />
+
+<!-- Or use the presentational card directly with fixed props -->
+<TicketCard client:visible name="David Huertas" ticketNumber={1337} />
 `
 
 const lanyardBadgeUsage = `---
@@ -101,10 +100,11 @@ export const experiments: Experiment[] = [
     title: 'Event Ticket',
     description: 'A holographic event ticket that tilts and shines with your pointer.',
     about:
-      'A premium event ticket in the spirit of Supabase Launch Week passes. It tracks the pointer to tilt in 3D, sweeping a holographic foil and a specular glare across a dark card with a gradient border. All the shine is layered CSS driven by pointer position, and the tilt is disabled for visitors who prefer reduced motion.',
-    tags: ['React', '3D', 'Pointer'],
+      'A premium event ticket in the spirit of Supabase Launch Week passes. It tracks the pointer to tilt in 3D, sweeping a holographic foil and a specular glare across a dark card with a gradient border. All the shine is layered CSS driven by pointer position, and the tilt is disabled for visitors who prefer reduced motion. The inputs below let you customise the ticket live — state is client-side only, so it resets on reload.',
+    tags: ['React', '3D', 'Editable'],
     Demo: TicketCardDemo,
     files: [
+      { name: 'TicketCardEditable.tsx', lang: 'tsx', code: ticketCardEditableSource },
       { name: 'TicketCard.tsx', lang: 'tsx', code: ticketCardSource },
       { name: 'Usage.astro', lang: 'astro', code: ticketCardUsage }
     ]

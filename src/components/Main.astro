@@ -11,7 +11,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils'
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
 
-const years = new Date().getFullYear() - 2021
+const years = new Date().getFullYear() - 2020
 
 const allPosts = await getCollection('posts')
 const posts = allPosts
@@ -90,16 +90,16 @@ const bio = t('hero.bio').replace('{years}', String(years))
   style='--reveal-delay: 160ms'
   aria-labelledby='experiments-heading'
 >
-  <div class='mb-5 flex flex-col gap-1'>
+  <div class='flex flex-col gap-1 mb-5'>
     <h2
       id='experiments-heading'
       class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
     >
       {t('section.experiments')}
     </h2>
-    <p class='text-sm text-muted'>{t('section.experiments.desc')}</p>
+    <p class='text-muted text-sm'>{t('section.experiments.desc')}</p>
   </div>
-  <ul class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+  <ul class='gap-3 grid grid-cols-1 sm:grid-cols-2'>
     {
       experiments.map((exp, i) => {
         const Demo = exp.Demo

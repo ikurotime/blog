@@ -43,6 +43,17 @@ export default function LanyardBadge({
     const grommet = grommetRef.current
     if (!wrap || !rope || !badge || !grommet) return
 
+    // The badge swings past its card. Its nearest `.reveal` ancestor is a
+    // stacking context (it keeps a transform), so lift that whole context
+    // above sibling cards/sections to keep the badge on top while dragging.
+    const host = wrap.closest('.reveal') as HTMLElement | null
+    const prevZ = host?.style.zIndex ?? ''
+    const prevPos = host?.style.position ?? ''
+    if (host) {
+      host.style.position = 'relative'
+      host.style.zIndex = '30'
+    }
+
     const W = wrap.clientWidth || 320
     const cx = W / 2
     const topY = 6
@@ -184,6 +195,10 @@ export default function LanyardBadge({
       badge.removeEventListener('pointermove', onMove)
       badge.removeEventListener('pointerup', onUp)
       badge.removeEventListener('pointercancel', onUp)
+      if (host) {
+        host.style.zIndex = prevZ
+        host.style.position = prevPos
+      }
     }
   }, [])
 
@@ -218,8 +233,9 @@ export default function LanyardBadge({
             x2='0'
             y2='360'
           >
-            <stop offset='0' stopColor='#6366f1' />
-            <stop offset='1' stopColor='#0ea5e9' />
+            <stop offset='0' stopColor='#3f3f46' />
+            <stop offset='0.5' stopColor='#18181b' />
+            <stop offset='1' stopColor='#09090b' />
           </linearGradient>
         </defs>
       </svg>
@@ -235,7 +251,7 @@ export default function LanyardBadge({
           <div className='mx-auto mt-2 h-1.5 w-10 rounded-full bg-black/15' />
 
           {/* Header band */}
-          <div className='mt-2 flex items-center justify-between bg-gradient-to-r from-indigo-500 to-sky-500 px-3 py-1.5 text-white'>
+          <div className='mt-2 flex items-center justify-between bg-gradient-to-r from-neutral-800 to-neutral-950 px-3 py-1.5 text-white'>
             <span className='font-mono text-[9px] uppercase tracking-[0.2em]'>
               {event}
             </span>
@@ -244,7 +260,7 @@ export default function LanyardBadge({
 
           {/* Body */}
           <div className='flex flex-1 flex-col items-center justify-center gap-2 px-3 text-center'>
-            <div className='grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-sky-500 text-lg font-semibold text-white'>
+            <div className='grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-neutral-700 to-neutral-950 text-lg font-semibold text-white'>
               {name
                 .split(' ')
                 .map((w) => w[0])
