@@ -57,12 +57,14 @@ const permalink = new URL(Astro.url.pathname, Astro.site).href
   <body
     class='font-sans bg-bg text-ink antialiased selection:bg-ink selection:text-bg'
   >
-    <div class='mx-auto w-full max-w-[896px] px-6 sm:px-8'>
-      <Navbar />
-      <main class='pb-24'>
-        <slot />
-      </main>
-      <Footer />
+    <div class='mx-auto mb-16 w-full max-w-[896px] px-4 sm:px-6'>
+      <div class='frame frame-stack'>
+        <Navbar />
+        <main class='frame-stack'>
+          <slot />
+        </main>
+        <Footer />
+      </div>
     </div>
   </body>
 </html>

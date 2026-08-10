@@ -3,19 +3,32 @@ interface Props {
   title: string
   description: string
   href?: string
+  index?: number
 }
 
-const { title, description, href } = Astro.props as Props
+const { title, description, href, index } = Astro.props as Props
 ---
 
 <div
-  class='group flex flex-col gap-4 rounded-lg border border-line p-4 transition-colors hover:border-ink/40'
+  class='group flex h-full w-full flex-col gap-3 border-line border-r border-b p-5 transition-colors hover:bg-ink/[0.025]'
 >
+  <div class='flex items-center gap-3'>
+    {
+      index !== undefined && (
+        <span class='font-mono text-[10px] text-muted tracking-[0.14em]'>
+          {String(index + 1).padStart(2, '0')}
+        </span>
+      )
+    }
+    <span class='flex-1 bg-line h-px' aria-hidden='true'></span>
+  </div>
+
   <div
-    class='relative z-10 flex min-h-[112px] items-center justify-center rounded-md border border-line/70 bg-ink/[0.015] px-4 py-8'
+    class='relative z-10 flex min-h-[112px] items-center justify-center px-2 py-6'
   >
     <slot />
   </div>
+
   <div class='relative z-0 flex flex-col gap-1'>
     {
       href ? (

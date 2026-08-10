@@ -13,8 +13,11 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
 ---
 
-<MainLayout title={`${t('section.experiments')} — David Huertas`} language={lang}>
-  <section class='pt-12 sm:pt-16 reveal' style='--reveal-delay: 60ms'>
+<MainLayout
+  title={`${t('section.experiments')} — David Huertas`}
+  language={lang}
+>
+  <section class='frame-block reveal' style='--reveal-delay: 60ms'>
     <nav
       class='flex items-center gap-2 font-mono text-muted text-xs'
       aria-label='Breadcrumb'
@@ -32,17 +35,18 @@ const t = useTranslations(lang)
     </p>
   </section>
 
-  <section class='mt-12 reveal' style='--reveal-delay: 140ms'>
-    <ul class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+  <section class='frame-block reveal' style='--reveal-delay: 140ms'>
+    <ul class='grid grid-cols-1 sm:grid-cols-2 border-line border-t border-l'>
       {
         experiments.map((exp, i) => {
           const Demo = exp.Demo
           return (
-            <li class='reveal' style={`--reveal-delay: ${180 + i * 40}ms`}>
+            <li class='reveal flex' style={`--reveal-delay: ${180 + i * 40}ms`}>
               <ExperimentCard
                 title={exp.title}
                 description={exp.description}
                 href={`/${lang}/experiments/${exp.slug}`}
+                index={i}
               >
                 <Demo />
               </ExperimentCard>

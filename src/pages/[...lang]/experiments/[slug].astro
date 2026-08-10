@@ -25,8 +25,8 @@ const next = experiments[idx + 1]
 ---
 
 <MainLayout title={`${exp.title} — David Huertas`} language={lang}>
-  <article class='pb-4'>
-    <header class='pt-12 sm:pt-16 reveal' style='--reveal-delay: 60ms'>
+  <article class='frame-stack'>
+    <header class='frame-block reveal' style='--reveal-delay: 60ms'>
       <nav
         class='flex flex-wrap items-center gap-2 font-mono text-muted text-xs'
         aria-label='Breadcrumb'
@@ -40,7 +40,9 @@ const next = experiments[idx + 1]
         <span class='text-ink'>{exp.slug}</span>
       </nav>
 
-      <h1 class='mt-6 font-semibold text-ink text-3xl sm:text-4xl tracking-tight'>
+      <h1
+        class='mt-6 font-semibold text-ink text-3xl sm:text-4xl tracking-tight'
+      >
         {exp.title}
       </h1>
       <p class='mt-3 text-[15px] text-ink/80 leading-7'>{exp.about}</p>
@@ -49,7 +51,7 @@ const next = experiments[idx + 1]
         exp.tags.length > 0 && (
           <ul class='mt-4 flex flex-wrap gap-1.5'>
             {exp.tags.map((tag) => (
-              <li class='rounded-md border border-line px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted'>
+              <li class='border border-line px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted'>
                 {tag}
               </li>
             ))}
@@ -59,7 +61,7 @@ const next = experiments[idx + 1]
     </header>
 
     <section
-      class='mt-10 reveal'
+      class='frame-block reveal'
       style='--reveal-delay: 160ms'
       aria-labelledby='demo-heading'
     >
@@ -70,14 +72,14 @@ const next = experiments[idx + 1]
         {t('experiments.demo')}
       </h2>
       <div
-        class='flex min-h-[220px] items-center justify-center rounded-lg border border-line bg-ink/[0.015] px-6 py-16'
+        class='flex min-h-[220px] items-center justify-center border border-line bg-ink/[0.015] px-6 py-16'
       >
         <Demo />
       </div>
     </section>
 
     <section
-      class='mt-10 reveal'
+      class='frame-block reveal'
       style='--reveal-delay: 220ms'
       aria-labelledby='code-heading'
     >
@@ -91,40 +93,42 @@ const next = experiments[idx + 1]
     </section>
 
     <nav
-      class='mt-12 flex items-stretch gap-3 border-t border-line pt-6 reveal'
+      class='frame-block reveal'
       style='--reveal-delay: 280ms'
       aria-label='Pagination'
     >
-      {
-        prev ? (
-          <a
-            href={`/${lang}/experiments/${prev.slug}`}
-            class='group flex flex-1 flex-col gap-1 rounded-lg border border-line p-4 transition-colors hover:border-ink/40'
-          >
-            <span class='font-mono text-[10px] uppercase tracking-[0.18em] text-muted'>
-              ← {t('experiments.prev')}
-            </span>
-            <span class='text-sm font-medium text-ink'>{prev.title}</span>
-          </a>
-        ) : (
-          <span class='flex-1' />
-        )
-      }
-      {
-        next ? (
-          <a
-            href={`/${lang}/experiments/${next.slug}`}
-            class='group flex flex-1 flex-col items-end gap-1 rounded-lg border border-line p-4 text-right transition-colors hover:border-ink/40'
-          >
-            <span class='font-mono text-[10px] uppercase tracking-[0.18em] text-muted'>
-              {t('experiments.next')} →
-            </span>
-            <span class='text-sm font-medium text-ink'>{next.title}</span>
-          </a>
-        ) : (
-          <span class='flex-1' />
-        )
-      }
+      <div class='flex items-stretch border-line border-t border-l'>
+        {
+          prev ? (
+            <a
+              href={`/${lang}/experiments/${prev.slug}`}
+              class='flex flex-1 flex-col gap-1 border-line border-r border-b p-4 transition-colors hover:bg-ink/[0.025]'
+            >
+              <span class='font-mono text-[10px] uppercase tracking-[0.18em] text-muted'>
+                ← {t('experiments.prev')}
+              </span>
+              <span class='text-sm font-medium text-ink'>{prev.title}</span>
+            </a>
+          ) : (
+            <span class='flex-1 border-line border-r border-b' />
+          )
+        }
+        {
+          next ? (
+            <a
+              href={`/${lang}/experiments/${next.slug}`}
+              class='flex flex-1 flex-col items-end gap-1 border-line border-r border-b p-4 text-right transition-colors hover:bg-ink/[0.025]'
+            >
+              <span class='font-mono text-[10px] uppercase tracking-[0.18em] text-muted'>
+                {t('experiments.next')} →
+              </span>
+              <span class='text-sm font-medium text-ink'>{next.title}</span>
+            </a>
+          ) : (
+            <span class='flex-1 border-line border-r border-b' />
+          )
+        }
+      </div>
     </nav>
   </article>
 </MainLayout>

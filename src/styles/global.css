@@ -71,6 +71,41 @@
 }
 
 @layer components {
+  /* Boxed layout — persistent side rules that run the full page height, with
+     hairline dividers between the blocks stacked inside. Each block owns its
+     inline padding so the frame keeps the edges. */
+  .frame {
+    border-left: 1px solid rgb(var(--color-line));
+    border-right: 1px solid rgb(var(--color-line));
+    border-bottom: 1px solid rgb(var(--color-line));
+  }
+
+  .frame-stack > * + * {
+    border-top: 1px solid rgb(var(--color-line));
+  }
+
+  .frame-pad {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .frame-pad {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .frame-block {
+    padding: 3rem 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .frame-block {
+      padding: 3.5rem 2rem;
+    }
+  }
+
   .code-surface .astro-code {
     margin: 0;
     padding: 1rem 1.25rem;

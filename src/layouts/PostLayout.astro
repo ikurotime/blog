@@ -37,90 +37,85 @@ const { language, frontmatter } = Astro.props
       })()
     </script>
   </head>
-  <body
-    class='font-sans bg-bg text-ink antialiased'
-  >
+  <body class='font-sans bg-bg text-ink antialiased'>
     <ProgressBar />
-    <div class='mx-auto w-full max-w-[680px] px-6 sm:px-8'>
-      <Navbar />
-      <article class='pb-16'>
-        <header
-          class='flex flex-col gap-3 border-b border-line pb-8 pt-8 reveal'
-          style='--reveal-delay: 60ms'
-        >
-          <div
-            class='flex items-center gap-3 font-mono text-[11px] text-muted'
+    <div class='mx-auto mb-16 w-full max-w-[680px] px-4 sm:px-6'>
+      <div class='frame frame-stack'>
+        <Navbar />
+        <article class='frame-stack'>
+          <header
+            class='flex flex-col gap-3 frame-block reveal'
+            style='--reveal-delay: 60ms'
           >
-            <time>
-              {new Date(frontmatter.pubDate).toLocaleDateString(
-                language === 'es' ? 'es-ES' : 'en-US',
-                { year: 'numeric', month: 'short', day: 'numeric' }
-              )}
-            </time>
+            <div
+              class='flex items-center gap-3 font-mono text-[11px] text-muted'
+            >
+              <time>
+                {
+                  new Date(frontmatter.pubDate).toLocaleDateString(
+                    language === 'es' ? 'es-ES' : 'en-US',
+                    { year: 'numeric', month: 'short', day: 'numeric' }
+                  )
+                }
+              </time>
+              {
+                frontmatter.tags?.length > 0 && (
+                  <>
+                    <span class='text-muted/40'>·</span>
+                    <span>{frontmatter.tags.join(', ')}</span>
+                  </>
+                )
+              }
+            </div>
+            <h1
+              class='text-2xl sm:text-3xl font-semibold tracking-tight text-ink'
+            >
+              {frontmatter.title}
+            </h1>
             {
-              frontmatter.tags?.length > 0 && (
-                <>
-                  <span class='text-muted/40'>·</span>
-                  <span>{frontmatter.tags.join(', ')}</span>
-                </>
+              frontmatter.description && (
+                <p class='text-[15px] text-muted'>{frontmatter.description}</p>
               )
             }
+          </header>
+
+          <div class='frame-block reveal' style='--reveal-delay: 140ms'>
+            <Prose frontmatter={frontmatter}>
+              {
+                frontmatter.wip && (
+                  <div class='mb-6 rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300'>
+                    {frontmatter.language === 'es'
+                      ? '🛠️ Kuro está trabajando en este post. Todo deberia de funcionar como está indicado, pero puede que haya algunos errores.'
+                      : '🛠️ Kuro is working on this post. Everything should work as indicated, but there may be some errors.'}
+                  </div>
+                )
+              }
+              <slot />
+            </Prose>
           </div>
-          <h1
-            class='text-2xl sm:text-3xl font-semibold tracking-tight text-ink'
-          >
-            {frontmatter.title}
-          </h1>
-          {
-            frontmatter.description && (
-              <p class='text-[15px] text-muted'>
-                {frontmatter.description}
-              </p>
-            )
-          }
-        </header>
 
-        <div
-          class='pt-8 reveal'
-          style='--reveal-delay: 140ms'
-        >
-          <Prose frontmatter={frontmatter}>
-            {
-              frontmatter.wip && (
-                <div
-                  class='mb-6 rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300'
-                >
-                  {frontmatter.language === 'es'
-                    ? '🛠️ Kuro está trabajando en este post. Todo deberia de funcionar como está indicado, pero puede que haya algunos errores.'
-                    : '🛠️ Kuro is working on this post. Everything should work as indicated, but there may be some errors.'}
-                </div>
-              )
-            }
-            <slot />
-          </Prose>
-        </div>
-
-        <div class='mt-12'>
-          <script
-            id='giscus-script'
-            src='https://giscus.app/client.js'
-            data-repo='ikurotime/blog-comments'
-            data-repo-id='R_kgDOPtEulQ'
-            data-category='Announcements'
-            data-category-id='DIC_kwDOPtEulc4CvOdX'
-            data-mapping='pathname'
-            data-strict='0'
-            data-reactions-enabled='1'
-            data-emit-metadata='0'
-            data-input-position='top'
-            data-theme='light'
-            data-lang='en'
-            data-loading='lazy'
-            crossorigin='anonymous'
-            async></script>
-        </div>
-      </article>
-      <Footer />
+          <div class='frame-block'>
+            <script
+              id='giscus-script'
+              src='https://giscus.app/client.js'
+              data-repo='ikurotime/blog-comments'
+              data-repo-id='R_kgDOPtEulQ'
+              data-category='Announcements'
+              data-category-id='DIC_kwDOPtEulc4CvOdX'
+              data-mapping='pathname'
+              data-strict='0'
+              data-reactions-enabled='1'
+              data-emit-metadata='0'
+              data-input-position='top'
+              data-theme='light'
+              data-lang='en'
+              data-loading='lazy'
+              crossorigin='anonymous'
+              async></script>
+          </div>
+        </article>
+        <Footer />
+      </div>
     </div>
 
     <script>
