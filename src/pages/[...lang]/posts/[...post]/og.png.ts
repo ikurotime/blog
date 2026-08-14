@@ -42,7 +42,7 @@ const getBlogFrontmatterCollection = async () => {
     const files = await fs.readdir(dir)
     return Promise.all(
       files
-        .filter((file) => file.endsWith('.md'))
+        .filter((file) => file.endsWith('.md') || file.endsWith('.mdx'))
         .map(async (file) => {
           const content = await fs.readFile(`${dir}/${file}`, 'utf-8')
           return matter(content).data

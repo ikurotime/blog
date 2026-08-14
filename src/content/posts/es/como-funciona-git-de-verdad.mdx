@@ -1,0 +1,114 @@
+---
+title: 'Cómo funciona git de verdad'
+pubDate: 2026-08-08
+description: 'Git parece magia hasta que ves las tres ideas sobre las que está construido: snapshots, hashes por contenido y punteros. Vamos a abrir la carpeta .git y entenderlo de verdad, con demos interactivas.'
+author: 'Kuro'
+language: es
+heroImage: "../../../images/blog/git-internals.png"
+keywords: ['git', 'como funciona git', 'como funciona git de verdad', 'git internals', 'carpeta .git', 'git objects', 'blob tree commit', 'merkle tree', 'staging area', 'git index', 'HEAD git', 'refs git', 'git reflog', 'snapshots git']
+image:
+  url: 'https://davidhuertas.dev/git-internals'
+  alt: 'Cómo funciona git por dentro'
+tags: ['git', 'internals', 'fundamentos']
+layout: ../../../layouts/PostLayout.astro
+draft: false
+---
+
+import GitFolderExplorer from '../../../components/react/GitFolderExplorer'
+import GitObjectHasher from '../../../components/react/GitObjectHasher'
+import GitMerkleTree from '../../../components/react/GitMerkleTree'
+import GitStagingArea from '../../../components/react/GitStagingArea'
+import GitRefsHead from '../../../components/react/GitRefsHead'
+
+Usas `git` todos los días: `add`, `commit`, `push`. Pero cuando algo sale mal, se siente como magia negra.
+
+La buena noticia es que Git es mucho más simple de lo que parece. Todo lo que hace está construido sobre **tres ideas**:
+
+1. **Guarda fotos, no diferencias.** Cada commit es un snapshot completo del proyecto.
+2. **Todo se identifica por el hash de su contenido.** El mismo contenido → el mismo ID, siempre.
+3. **Las ramas y HEAD son solo punteros.** Archivos de texto que apuntan a un hash.
+
+Entiende esas tres cosas y Git deja de dar miedo. Vamos a verlas una a una, tocándolas.
+
+## 1. Git guarda fotos, no diferencias
+
+Mucha gente cree que Git guarda "los cambios" de cada commit. No es así. Git guarda *snapshots*: el equivalente a una foto del proyecto entero, congelando su estado en un momento concreto. Cada vez que haces un commit, generas una snapshot.
+
+¿Y dónde vive todo eso —los snapshots, el árbol de hashes, las ramas, el historial completo? Dentro de una carpeta oculta que se crea con cada repositorio: `.git`.
+
+Lo más seguro es que nunca tengas que abrirla, pero es la responsable de guardar **toda** la información de tu proyecto. Si la abres, te encuentras con algo así:
+
+```txt
+.git/
+├── objects/        ├── HEAD
+├── refs/           ├── index
+├── logs/           ├── config
+├── hooks/          ├── description
+└── info/           └── COMMIT_EDITMSG
+```
+
+Haz clic en cada entrada para ver qué guarda:
+
+<GitFolderExplorer client:visible lang="es" />
+
+## 2. Todo se identifica por su contenido
+
+`objects/` es la carpeta más importante de todas: aquí es donde viven físicamente los snapshots. Git guarda tres tipos de objetos:
+
+- **blob** → el contenido de un archivo
+- **tree** → una carpeta (qué archivos hay y cómo se llaman)
+- **commit** → quién hizo el snapshot, cuándo, y qué tree congela
+
+Cada objeto se identifica por el **hash de su contenido** —por eso los IDs de commit parecen contraseñas—.
+
+¿No te lo crees? Aquí lo tienes de verdad. Escribe cualquier cosa: esto calcula el **mismo SHA-1 que usaría Git** para guardar ese archivo como un blob. Cambia una letra y mira lo que le pasa al ID:
+
+<GitObjectHasher client:visible lang="es" />
+
+Fíjate en dos cosas: el ID cambia por completo con un solo carácter, y el mismo contenido siempre produce el mismo ID. Por eso Git nunca guarda dos veces el mismo archivo: si el hash ya existe, ya está guardado.
+
+## 3. El merkle tree: cómo encaja todo
+
+Aquí está la idea central. Un **commit** apunta a un **tree**, y un tree apunta a los **blobs**. Como el ID de cada nodo se calcula a partir del contenido de sus hijos, cambiar un solo archivo cambia su blob, lo que cambia el tree, lo que cambia el commit. Eso es un **merkle tree** (o árbol de hashes).
+
+Edita un archivo y mira cómo el cambio sube en cascada. Fíjate en que los blobs que *no* tocas conservan su hash: Git no los vuelve a guardar, los reutiliza entre commits.
+
+<GitMerkleTree client:visible lang="es" />
+
+Esto explica dos cosas de golpe: por qué cada commit tiene un ID único (depende de todo lo que contiene) y por qué el historial de Git es tan barato en espacio (los archivos que no cambian se comparten).
+
+## 4. Las ramas y HEAD son solo punteros
+
+Un hash como `a3f9c21…` no hay quien lo recuerde. `refs/` guarda punteros con nombres humanos: tus ramas (`refs/heads/main`), tus tags (`refs/tags/v1.0`) y las ramas remotas.
+
+Una rama, por dentro, es **solo un archivo de texto con el hash del último commit**. Nada más.
+
+¿Y cómo sabe Git en qué rama estás? Con `HEAD`: un archivo de una sola línea que apunta a la rama actual. Cuando haces `git checkout`, lo único que cambia es esa línea.
+
+Haz commits, crea ramas y cambia entre ellas. Observa cómo `HEAD` y los archivos de `refs/heads/` son solo texto que apunta a un hash:
+
+<GitRefsHead client:visible lang="es" />
+
+## 5. El staging area: el paso intermedio
+
+Queda una pieza: ¿dónde van los archivos cuando haces `git add`? Al `index`, también llamado *staging area*. Es la "sala de espera" de tu próximo commit: la lista de lo que va a entrar en el siguiente snapshot.
+
+`git add` los pasa a la sala de espera; `git commit` congela lo que haya ahí en un snapshot dentro de `objects/`. Muévelos tú mismo:
+
+<GitStagingArea client:visible lang="es" />
+
+## Las piezas que quedan
+
+El resto de la carpeta `.git` son utilidades alrededor de esas ideas:
+
+- **logs/** — el diario. Registra cada movimiento de HEAD y de tus ramas. Es lo que consulta `git reflog`, y la razón por la que "perder" un commit casi nunca es perderlo de verdad.
+- **config** — los ajustes de este repositorio: la URL del remoto, qué ramas siguen a cuáles, tu nombre y email locales. Cuando haces `git remote add origin…`, se escribe aquí.
+- **hooks/** — scripts que Git ejecuta automáticamente en momentos clave (antes de un commit, antes de un push…). Aquí viven los linters que te bloquean el commit. Por defecto solo trae ejemplos desactivados.
+- **info/** — contiene `info/exclude`, un `.gitignore` privado que solo afecta a tu máquina.
+- **description** y **COMMIT_EDITMSG** — dos archivos menores: el primero solo lo usan herramientas web antiguas como GitWeb; el segundo guarda el texto de tu último mensaje de commit.
+
+## Cierre
+
+Así que Git no es magia. Es una **base de datos de snapshots** (`objects`) encadenados por sus hashes en un merkle tree, unos **punteros con nombre** (`refs` y `HEAD`), una **sala de espera** (`index`) y un **diario** de todo lo que has hecho (`logs`).
+
+Tres ideas —fotos, hashes y punteros— y encima de eso está construido todo GitHub.
