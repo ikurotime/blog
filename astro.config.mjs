@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import tailwind from '@astrojs/tailwind'
+import mdx from '@astrojs/mdx'
 
 import sitemap from '@astrojs/sitemap'
 
@@ -10,7 +11,7 @@ export default defineConfig({
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:4321'
       : 'https://davidhuertas.dev',
-  integrations: [tailwind(), react(), sitemap()],
+  integrations: [tailwind(), react(), mdx(), sitemap()],
   markdown: {
     shikiConfig: {
       themes: {
