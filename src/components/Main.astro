@@ -2,6 +2,10 @@
 import { getCollection } from 'astro:content'
 import Card from '../layouts/Card.astro'
 import ProjectCard from './ProjectCard.astro'
+import kitmoPreview from '../images/projects/kitmo-preview.jpg'
+import tabstashPreview from '../images/projects/tabstash-preview.png'
+import kitmoCover from '../images/projects/kitmo.png'
+import tabstashCover from '../images/projects/tabstash.png'
 import ExperimentCard from './ExperimentCard.astro'
 import { experiments } from '../data/experiments'
 import ScrambleText from './react/ScrambleText.tsx'
@@ -30,21 +34,33 @@ const getPostPath = (page: { slug: string }) => {
 const projects = [
   {
     title: 'Kitmo',
-    description: 'A all in one tool for creators',
+    description:
+      lang === 'es'
+        ? 'Prepara, adapta y programa contenido para tus redes desde un mismo lugar.'
+        : 'Prepare, adapt, and schedule content across social channels in one place.',
+    cover: kitmoCover,
+    preview: kitmoPreview,
+    previewAlt:
+      lang === 'es'
+        ? 'Vista del calendario de publicaciones de Kitmo.'
+        : 'Kitmo publishing calendar preview.',
     tags: ['React'],
     href: 'https://kitmo.app'
   },
   {
-    title: 'Rust for JS Devs',
-    description: 'A learning resource for JavaScript developers to learn Rust.',
-    tags: ['Astro'],
-    href: 'https://rustforjsdevs.com/'
-  },
-  {
-    title: 'Go API · Hexagonal Architecture',
-    description: 'A reference Go API built around hexagonal architecture.',
-    tags: ['Go', 'Architecture'],
-    href: 'https://github.com/ikurotime/go_api_clean_architecture'
+    title: 'Tabstash',
+    description:
+      lang === 'es'
+        ? 'Organiza enlaces, imágenes y notas en un lienzo infinito.'
+        : 'Organize links, images, and notes on an infinite canvas.',
+    cover: tabstashCover,
+    preview: tabstashPreview,
+    previewAlt:
+      lang === 'es'
+        ? 'Lienzo de Tabstash con enlaces, imágenes, notas y tareas.'
+        : 'Tabstash canvas with links, images, notes, and tasks.',
+    tags: ['React'],
+    href: 'https://tabstash.dev'
   }
 ]
 
@@ -83,6 +99,39 @@ const bio = t('hero.bio').replace('{years}', String(years))
   <p class='mt-6 text-[15px] text-ink/80 leading-7'>
     {bio}
   </p>
+</section>
+
+<section
+  class='frame-block reveal'
+  style='--reveal-delay: 160ms'
+  aria-labelledby='projects-heading'
+>
+  <div class='flex justify-between items-baseline mb-5'>
+    <h2
+      id='projects-heading'
+      class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
+    >
+      {t('section.projects')}
+    </h2>
+  </div>
+  <ul class='grid grid-cols-1 sm:grid-cols-2 border-line border-t border-l'>
+    {
+      projects.map((project, i) => (
+        <li class='reveal flex' style={`--reveal-delay: ${180 + i * 40}ms`}>
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            tags={project.tags}
+            href={project.href}
+            cover={project.cover}
+            preview={project.preview}
+            previewAlt={project.previewAlt}
+            previewLabel={lang === 'es' ? 'Ver captura' : 'View screenshot'}
+          />
+        </li>
+      ))
+    }
+  </ul>
 </section>
 
 <section
@@ -157,36 +206,6 @@ const bio = t('hero.bio').replace('{years}', String(years))
     </section>
   )
 }
-
-<section
-  class='frame-block reveal'
-  style='--reveal-delay: 320ms'
-  aria-labelledby='projects-heading'
->
-  <div class='flex justify-between items-baseline mb-5'>
-    <h2
-      id='projects-heading'
-      class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
-    >
-      {t('section.projects')}
-    </h2>
-  </div>
-  <ul class='grid grid-cols-1 border-line border-t border-l'>
-    {
-      projects.map((project, i) => (
-        <li class='reveal flex' style={`--reveal-delay: ${360 + i * 80}ms`}>
-          <ProjectCard
-            title={project.title}
-            description={project.description}
-            tags={project.tags}
-            href={project.href}
-            index={i}
-          />
-        </li>
-      ))
-    }
-  </ul>
-</section>
 
 <section
   class='frame-block reveal'

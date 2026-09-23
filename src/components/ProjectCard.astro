@@ -1,64 +1,111 @@
 ---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
 interface Props {
   title: string
   description: string
   tags?: string[]
   href: string
-  index?: number
+  cover?: ImageMetadata
+  preview?: ImageMetadata
+  previewAlt?: string
+  previewLabel?: string
 }
 
-const { title, description, tags = [], href, index } = Astro.props as Props
+const {
+  title,
+  description,
+  tags = [],
+  href,
+  cover,
+  preview,
+  previewAlt = '',
+  previewLabel
+} = Astro.props as Props
 ---
 
-<a
-  href={href}
-  target='_blank'
-  rel='noreferrer'
-  class='group relative flex h-full w-full flex-col gap-2 border-line border-r border-b p-5 transition-colors hover:bg-ink/[0.025]'
->
-  <div class='flex items-center gap-3'>
+<article class='flex w-full flex-col border-line border-r border-b'>
+  <a
+    href={href}
+    target='_blank'
+    rel='noreferrer'
+    class='group relative flex h-full w-full flex-col transition-colors hover:bg-ink/[0.025] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink'
+  >
     {
-      index !== undefined && (
-        <span class='font-mono text-[10px] text-muted tracking-[0.14em]'>
-          {String(index + 1).padStart(2, '0')}
-        </span>
+      cover && (
+        <Image
+          src={cover}
+          alt=''
+          widths={[400, 800]}
+          sizes='(min-width: 896px) 382px, (min-width: 640px) 44vw, 90vw'
+          format='webp'
+          class='aspect-[1200/630] w-full border-b border-line object-contain'
+          loading='lazy'
+        />
       )
     }
-    <span class='flex-1 bg-line h-px' aria-hidden='true'></span>
-  </div>
-  <div class='flex items-start justify-between gap-3'>
-    <h3
-      class='text-[15px] font-medium text-ink transition-transform group-hover:translate-x-0.5'
-    >
-      {title}
-    </h3>
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      width='14'
-      height='14'
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      stroke-width='2'
-      stroke-linecap='round'
-      stroke-linejoin='round'
-      class='shrink-0 text-muted transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink'
-      aria-hidden='true'
-    >
-      <path d='M7 17 17 7'></path>
-      <path d='M7 7h10v10'></path>
-    </svg>
-  </div>
-  <p class='text-sm text-muted'>{description}</p>
+    <div class='flex flex-1 flex-col gap-2 p-5'>
+      <div class='flex items-start justify-between gap-3'>
+        <h3 class='text-[15px] font-medium text-ink'>
+          {title}
+        </h3>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='14'
+          height='14'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          class='shrink-0 text-muted transition-colors group-hover:text-ink'
+          aria-hidden='true'
+        >
+          <path d='M7 17 17 7'></path>
+          <path d='M7 7h10v10'></path>
+        </svg>
+      </div>
+      <p class='text-sm text-muted'>{description}</p>
+      {
+        tags.length > 0 && (
+          <ul class='mt-1 flex flex-wrap gap-1.5'>
+            {tags.map((tag) => (
+              <li class='border border-line px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted'>
+                {tag}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </a>
+
   {
-    tags.length > 0 && (
-      <ul class='mt-1 flex flex-wrap gap-1.5'>
-        {tags.map((tag) => (
-          <li class='border border-line px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted'>
-            {tag}
-          </li>
-        ))}
-      </ul>
+    preview && (
+      <details class='border-t border-line'>
+        <summary class='cursor-pointer px-5 py-3 text-xs text-muted hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink'>
+          {previewLabel}
+          <span class='sr-only'> · {title}</span>
+        </summary>
+        <a
+          href={preview.src}
+          target='_blank'
+          rel='noreferrer'
+          class='block focus-visible:outline focus-visible:outline-2 focus-visible:outline-ink'
+        >
+          <Image
+            src={preview}
+            alt={previewAlt}
+            widths={[400, 800]}
+            sizes='(min-width: 640px) 44vw, 90vw'
+            format='webp'
+            loading='lazy'
+            class='h-auto w-full'
+          />
+        </a>
+      </details>
     )
   }
-</a>
+</article>
