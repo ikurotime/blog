@@ -6,6 +6,7 @@ import kitmoPreview from '../images/projects/kitmo-preview.jpg'
 import tabstashPreview from '../images/projects/tabstash-preview.png'
 import kitmoCover from '../images/projects/kitmo.png'
 import tabstashCover from '../images/projects/tabstash.png'
+import linkoiCover from '../images/projects/linkoi.svg'
 import ExperimentCard from './ExperimentCard.astro'
 import { experiments } from '../data/experiments'
 import ScrambleText from './react/ScrambleText.tsx'
@@ -61,6 +62,16 @@ const projects = [
         : 'Tabstash canvas with links, images, notes, and tasks.',
     tags: ['React'],
     href: 'https://tabstash.dev'
+  },
+  {
+    title: 'Linkoi',
+    description:
+      lang === 'es'
+        ? 'Extrae títulos, imágenes y otros metadatos de enlaces con una API y un SDK de TypeScript.'
+        : 'Extract titles, images, and other link metadata with an API and TypeScript SDK.',
+    cover: linkoiCover,
+    tags: ['TypeScript', 'Cloudflare'],
+    href: 'https://linkoi.dev'
   }
 ]
 
