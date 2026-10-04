@@ -1,26 +1,63 @@
 ---
 import LanguagePicker from '../components/LanguagePicker.astro'
 import DarkModeToggle from '../components/DarkModeToggle.astro'
-import { getLangFromUrl } from '../i18n/utils'
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const path = Astro.url.pathname
+const isExperiments = /\/experiments(\/|$)/.test(path)
+const current = isExperiments ? 'experiments' : 'home'
+
+const tabs = [
+  { id: 'home', label: t('nav.home'), href: `/${lang}/` },
+  {
+    id: 'experiments',
+    label: t('nav.experiments'),
+    href: `/${lang}/experiments`
+  }
+] as const
 ---
 
 <header
-  class='flex justify-between items-center frame-pad py-5 text-sm reveal'
+  class='flex justify-between items-center gap-4 frame-pad py-5 text-sm reveal'
   style='--reveal-delay: 0ms'
 >
-  <a
-    href={`/${lang}/`}
-    class='group flex items-center gap-2 font-medium tracking-tight'
-    aria-label='Home'
-  >
-    <span
-      class='inline-flex justify-center items-center w-6 h-6 font-mono text-[11px] group-hover:-rotate-6 transition-transform'
-      >🚀</span
+  <div class='flex items-center gap-4 sm:gap-6'>
+    <a
+      href={`/${lang}/`}
+      class='group flex items-center gap-2 font-medium tracking-tight'
+      aria-label='Home'
     >
-    <span class='text-ink'>kuro</span>
-  </a>
+      <span
+        class='inline-flex justify-center items-center w-6 h-6 font-mono text-[11px] group-hover:-rotate-6 transition-transform'
+        >🚀</span
+      >
+      <span class='hidden text-ink sm:inline'>kuro</span>
+    </a>
+    <nav
+      class='flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.14em]'
+      aria-label='Primary'
+    >
+      {
+        tabs.map((tab) => (
+          <a
+            href={tab.href}
+            aria-current={current === tab.id ? 'page' : undefined}
+            class:list={[
+              'rounded-full px-2.5 py-1 transition-colors',
+              current === tab.id
+                ? 'bg-ink/[0.06] text-ink'
+                : 'text-muted hover:text-ink'
+            ]}
+          >
+            {tab.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
   <nav class='flex items-center gap-4 text-muted'>
     <LanguagePicker />
     <DarkModeToggle />

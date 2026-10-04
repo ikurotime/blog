@@ -13,6 +13,8 @@ export const ui = {
     'hero.bio':
       "I'm a software engineer with {years}+ years of experience building things on the web. I care about open source, great UX/UI, and a good napolitan pizza. Also a vim user, btw.",
     'section.projects': 'Selected work',
+    'nav.home': 'Home',
+    'nav.experiments': 'Experiments',
     'section.writing': 'Writing',
     'section.experiments': 'Experiments',
     'section.experiments.desc': 'Small interface studies and component demos.',
@@ -33,6 +35,8 @@ export const ui = {
     'hero.bio':
       'Soy un ingeniero de software con +{years} años de experiencia construyendo cosas en la web. Me gusta el código abierto, el buen diseño UX/UI y una buena pizza napolitana. Vim user, por cierto.',
     'section.projects': 'Trabajos seleccionados',
+    'nav.home': 'Inicio',
+    'nav.experiments': 'Experimentos',
     'section.writing': 'Blog',
     'section.experiments': 'Experimentos',
     'section.experiments.desc': 'Pequeños estudios de interfaz y demos de componentes.',
