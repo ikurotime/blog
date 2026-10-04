@@ -7,8 +7,6 @@ import tabstashPreview from '../images/projects/tabstash-preview.png'
 import kitmoCover from '../images/projects/kitmo.png'
 import tabstashCover from '../images/projects/tabstash.png'
 import linkoiCover from '../images/projects/linkoi.svg'
-import ExperimentCard from './ExperimentCard.astro'
-import { experiments } from '../data/experiments'
 import ScrambleText from './react/ScrambleText.tsx'
 import Status from './Status.astro'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
@@ -150,34 +148,21 @@ const bio = t('hero.bio').replace('{years}', String(years))
   style='--reveal-delay: 160ms'
   aria-labelledby='experiments-heading'
 >
-  <div class='flex flex-col gap-1 mb-5'>
-    <h2
-      id='experiments-heading'
-      class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
-    >
-      {t('section.experiments')}
-    </h2>
-    <p class='text-muted text-sm'>{t('section.experiments.desc')}</p>
+  <div class='flex items-baseline justify-between gap-4 mb-5'>
+    <div class='flex flex-col gap-1'>
+      <h2
+        id='experiments-heading'
+        class='font-mono text-muted text-xs uppercase tracking-[0.18em]'
+      >
+        {t('section.experiments')}
+      </h2>
+      <p class='text-muted text-sm'>{t('section.experiments.desc')}</p>
+    </div>
+    <a href={`/${lang}/experiments`} class='text-sm text-ink link-underline'>
+      {t('experiments.all')}
+      <span class='ml-1 text-muted'>→</span>
+    </a>
   </div>
-  <ul class='grid grid-cols-1 sm:grid-cols-2 border-line border-t border-l'>
-    {
-      experiments.map((exp, i) => {
-        const Demo = exp.Demo
-        return (
-          <li class='reveal flex' style={`--reveal-delay: ${200 + i * 40}ms`}>
-            <ExperimentCard
-              title={exp.title}
-              description={exp.description}
-              href={`/${lang}/experiments/${exp.slug}`}
-              index={i}
-            >
-              <Demo />
-            </ExperimentCard>
-          </li>
-        )
-      })
-    }
-  </ul>
 </section>
 
 {
